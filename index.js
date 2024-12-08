@@ -4,6 +4,7 @@ const path = require("path");
 const connectionDB = require("./src/config/connectionDB");
 const authRoutes = require("./src/routes/auth.routes");
 const corsAllows = require("./src/utils/corsAllows.utils");
+const cookieParser = require("cookie-parser")
 require("dotenv").config();
 
 const app = express();
@@ -14,10 +15,11 @@ app.use(cors({
     credentials:corsAllows.credentials
 }))
 app.use(express.json());
+app.use(cookieParser())
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/api/v1",authRoutes);
+app.use("/api/v1/auth",authRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
