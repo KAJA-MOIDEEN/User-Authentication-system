@@ -77,7 +77,7 @@ export const AuthContextProvider = ({ children }) => {
             toast.error(error.response?.data?.message || "An error occurred");
         }
     };
-    // reset Password
+    // reset Password   
     const resetPassword = async (formData, id, _id) => {
         try {
             const response = await axios.post(`${backendUrl}/api/v1/auth/reset-password/${id}/${_id}`, { currentPassword: formData.currentPassword, newPassword: formData.newPassword, confirmPassword: formData.confirmPassword }, { withCredentials: true })

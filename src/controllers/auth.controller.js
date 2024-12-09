@@ -2,10 +2,15 @@ const User = require("../models/user.model")
 const bcrypt = require("bcrypt")
 const {generateToken, verifyToken} = require("../utils/token.utils")
 const jwt = require("jsonwebtoken")
+const validateEmail = require("../utils/emailValidation")
 
 const register = async(req,res)=>{
     try {
         const {userName,password,confirmPassword,email} = req.body
+        
+        if(!validateEmail(email)){
+            return res.status(400).json({ message: "Invalid email" })
+        }
         const existEmail = await User.findOne({email})
         if(existEmail){
             return res.status(400).json({message:"Email Already Exist"})
@@ -75,7 +80,6 @@ const login = async(req,res)=>{
 
 const logout = (req, res) => {
     try {
-      // Clear the token cookie
       res.cookie("token", "", { 
         httpOnly: true, 
         secure: process.env.NODE_ENV !== "development", 
@@ -83,7 +87,6 @@ const logout = (req, res) => {
         maxAge: 0 
       });
   
-      // Send success response
       res.status(200).json({ message: "User logged out successfully" });
     } catch (error) {
       console.error("Error:", error.message);
